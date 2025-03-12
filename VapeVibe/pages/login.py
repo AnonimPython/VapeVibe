@@ -13,9 +13,21 @@ def login() -> rx.Component:
             rx.hstack(
                 rx.box(
                     rx.form(
-                        rx.input(placeholder="Email", width="100%",style=input_style),
-                        rx.input(placeholder="Password", width="100%", margin_top="20px",style=input_style),
-                        
+                        rx.vstack(
+                            rx.input(
+                                placeholder="Mail",
+                                name="mail",
+                                width="100%",
+                                style=input_style
+                            ),
+                            rx.input(
+                                placeholder="Password", 
+                                name="password",
+                                width="100%", 
+                                style=input_style
+                            ),
+                            spacing="6"
+                        ),
                         rx.button(
                             rx.text("Login",font_size="20px",color="white",weight="bold"),
                             width="100%",
