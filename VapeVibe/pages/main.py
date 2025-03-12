@@ -3,7 +3,16 @@ import reflex as rx
 
 def main() -> rx.Component:
     return rx.box(
-        rx.text("MAIN PAGE"),
+        #* header
+        rx.box(
+            rx.hstack(
+                #* user image 
+                rx.box(
+                    rx.image(""),
+                ),    
+            ),
+            
+        ),
         
     display=rx.breakpoints(
         initial="block",  #? mobile
