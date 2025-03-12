@@ -2,6 +2,13 @@ import reflex as rx
 
 
 def main() -> rx.Component:
-    return rx.mobile_and_tablet(
-        rx.heading("MAIN PAGE"),
+    return rx.box(
+        rx.text("MAIN PAGE"),
+        
+    display=rx.breakpoints(
+        initial="block",  #? mobile
+        sm="block",      #? tablets
+        md="block",      #? middle screen
+        lg="none"        #? big screen < 1366px
+    ),
     )

@@ -18,13 +18,13 @@ app = rx.App(
     ],
     #* global styles
     style={
-        "font_family": "Montserrat sans-serif;",
-        # "background_color": BACKGROUND,
-        "height": "100%",
+        "breakpoints": ["520px", "768px", "1024px", "1367px"],
+        "font_family": "Montserrat, sans-serif",
+        "height": "100vh",
         "width": "100%",
     }
 )
 # app.add_page(index)
 app.add_page(main, route="/")
-app.add_page(login, route="/register")
-app.add_page(register, route="/login")
+app.add_page(login, route="/login")
+app.add_page(register, route="/register")
