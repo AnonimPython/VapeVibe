@@ -1,6 +1,12 @@
+'''
+ ▗▄▖ ▗▖  ▗▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▖ ▗▖  ▗▖▗▄▄▄▖▗▖ ▗▖ ▗▄▖ ▗▖  ▗▖
+▐▌ ▐▌▐▛▚▖▐▌▐▌ ▐▌▐▛▚▖▐▌  █  ▐▛▚▞▜▌▐▌ ▐▌ ▝▚▞▘   █  ▐▌ ▐▌▐▌ ▐▌▐▛▚▖▐▌
+▐▛▀▜▌▐▌ ▝▜▌▐▌ ▐▌▐▌ ▝▜▌  █  ▐▌  ▐▌▐▛▀▘   ▐▌    █  ▐▛▀▜▌▐▌ ▐▌▐▌ ▝▜▌
+▐▌ ▐▌▐▌  ▐▌▝▚▄▞▘▐▌  ▐▌▗▄█▄▖▐▌  ▐▌▐▌     ▐▌    █  ▐▌ ▐▌▝▚▄▞▘▐▌  ▐▌
+'''
 import reflex as rx
 from rxconfig import config
-
+from .ui.colors import *
 #* USER PAGES
 from .pages.main import main
 from .pages.login import login
@@ -18,10 +24,11 @@ app = rx.App(
     ],
     #* global styles
     style={
-        "breakpoints": ["520px", "768px", "1024px", "1367px"],
+        "breakpoints": ["640px", "768px", "1024px","1367px"],
         "font_family": "Montserrat, sans-serif",
         "height": "100vh",
         "width": "100%",
+        "background": BACKGROUND,
     }
 )
 # app.add_page(index)
