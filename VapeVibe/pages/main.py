@@ -79,49 +79,52 @@ def main() -> rx.Component:
                 margin_top="50px",
                 justify="between",
                 width="100%",
+                    padding_left=rx.breakpoints(
+                    sm="20px",
+                    md="120px",
+                ),
             ),
             #* scroll area with filter buttons
             rx.box(
-                #! test data
                 rx.scroll_area(
                     rx.flex(
-                        rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk",font_size="25px"),
-                                background="transparent",
-                            ), 
-                            rx.button(
-                                rx.text("Salty Caramel"),font_size="25px",
-                                background="transparent",
-                            ),   
-                        ),
+                        *[rx.button("Creamy Milk", font_size="25px", background="transparent") for _ in range(10)],  #! TEST],
+
                         direction="row",
-                        spacing="4", 
+                        spacing="4",
                         wrap="nowrap",
-                        width="80%",
-                    ),    
+                        min_width="max-content",
+                        width="100%",
+                    ),
                     scrollbars="horizontal",
-                    type="always",
+                    type="hover",
                     width="100%",
-                    style={"height": "auto"},
-                ),   
-                margin_top="50px", 
+                    height="auto",
+                    style={
+                        "overflowX": "auto",
+                        "whiteSpace": "nowrap",
+                    }
+                ),
+                margin_top="50px",
                 width="100%",
+                overflow="hidden",
             ),
             #* scroll area with product
             rx.box(
                 rx.scroll_area(
                     rx.flex(
-                        rx.box(
-                            rx.link(
+                        *[rx.link(
+                            rx.vstack(
                                 rx.image(
                                     src="https://static.insales-cdn.com/r/9l1M24o5xE0/rs:fit:1000:0:1/q:100/plain/images/products/1/5370/612308218/Vaporesso-Xros-Mini-1000mAh-MTL-Pod-Kit-Sakura_Pink-3.jpeg@jpeg",
                                     width="200px",
-                                    height="200px",       
+                                    height="200px",
+                                    object_fit="cover",
+                                    border_radius="10px",
                                 ),
                                 rx.text(
                                     "Vaporesso XROS Mini",
-                                    width="100%", 
+                                    width="200px", 
                                     font_size="20px",
                                     color=GRAY,
                                     margin_top="10px",
@@ -132,32 +135,117 @@ def main() -> rx.Component:
                                     color=BROWN, 
                                     font_weight="bold",
                                 ),
+                                spacing="2",
+                                align="center",
                             ),
-                        ),
+                            href="#",
+                            _hover={"text_decoration": "none"},
+                            min_width="250px",
+                            margin_right="20px",
+                        ) for _ in range(10)],  #! TEST
+                        
                         direction="row",
-                        spacing="4",
+                        spacing="0",
                         wrap="nowrap",
-                        padding="8px",
-                        style={"width": "max-content"},
+                        min_width="max-content",
+                        padding="10px",
                     ),
-                    type="always", 
                     scrollbars="horizontal",
-                    style={"height": "auto", "maxWidth": "100%"},
+                    type="hover",
+                    width="100%",
+                    style={
+                        "overflowX": "auto",
+                        "whiteSpace": "nowrap",
+                    }
+                ),
+                width="100%",
+                margin_top="50px",
+                overflow="hidden",
+            ),
+            rx.box(
+                rx.hstack(
+                    rx.text(
+                        "Feature Products",
+                        font_size=rx.breakpoints(
+                            initial="20px",
+                            sm="25px",
+                            md="30px",
+                        ),
+                        font_weight="bold",
+                    ),
+                    rx.spacer(),
+                    rx.link(
+                        "View All",
+                        href="#",
+                        color=BROWN,
+                        underline="always",
+                        weight="bold",
+                        font_size=rx.breakpoints(
+                            initial="20px",
+                            sm="25px",
+                            md="30px",
+                        ),
+                    ),
+                ),
+                #* products
+                rx.box(
+                    rx.flex(
+                        #* card of product
+                        *[rx.box(
+                            rx.hstack(
+                                rx.image(
+                                    "https://tabac.ru/files/products/vaporesso_xros_3_nano_1000_mah_pod_kit_-_lilac_purple.800x600.jpg", 
+                                    width="100px",
+                                    height="100px",
+                                    object_fit="cover",
+                                    border_radius="8px"
+                                ),    
+                                rx.vstack(
+                                    rx.text("Vaporesso XROS 3 Nano", font_size="20px", color=GRAY),
+                                    rx.text("200$", font_size="20px", color=BROWN, font_weight="bold"),
+                                    spacing="1",
+                                    align_items="start",
+                                    flex="1",
+                                ),
+                                rx.button(
+                                    rx.icon(tag="heart", color='red', size=30,), 
+                                    #! if user click -> style={"fill": "red"}
+                                    background="transparent",
+                                    padding="0",
+                                    align="center",
+                                    align_self="center",
+                                ),
+                                spacing="3",
+                                width="100%",
+                                padding="10px",
+                            ), 
+                            border=f"1px solid #202020",
+                            border_radius="12px",
+                            min_width="300px",
+                            flex="1 1 300px",
+                            margin=rx.breakpoints(
+                                initial="0",
+                                sm="5px",
+                                md="10px",
+                            ),
+                        ) for _ in range(10)], #! TEST
+                        wrap="wrap",
+                        justify="center",
+                        gap="10px",
+                        padding=rx.breakpoints(
+                            initial="0",
+                            sm="10px",
+                            md="20px",
+                        ),
+                        width="100%",
+                    ),
+                    width="100%",
+                    overflow="hidden",
                 ),
                 width="100%",
                 margin_top="50px",
             ),
-            
-            margin_left=rx.breakpoints(
-                sm="20px",
-                md="120px",
-            ),
-
         ),
-        
-        
-        
-        
         display=rx.breakpoints(
             initial="block",
             sm="block",
