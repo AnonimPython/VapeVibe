@@ -87,72 +87,65 @@ def main() -> rx.Component:
                     rx.flex(
                         rx.box(
                             rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),
-                        # !!!!!!!
-                        rx.box(
+                                rx.text("Creamy Milk",font_size="25px"),
+                                background="transparent",
+                            ), 
                             rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk"),
-                            ),   
-                        ),rx.box(
-                            rx.button(
-                                rx.text("Creamy Milk"),
+                                rx.text("Salty Caramel"),font_size="25px",
+                                background="transparent",
                             ),   
                         ),
                         direction="row",
-                        spacing="4",
-                        # !!!!!!
+                        spacing="4", 
+                        wrap="nowrap",
+                        width="80%",
                     ),    
                     scrollbars="horizontal",
                     type="always",
-                    width=rx.breakpoints(
-                        initial="100%",
-                        sm="50%",
-                        md="70%",
-                    ),
+                    width="100%",
+                    style={"height": "auto"},
                 ),   
                 margin_top="50px", 
+                width="100%",
+            ),
+            #* scroll area with product
+            rx.box(
+                rx.scroll_area(
+                    rx.flex(
+                        rx.box(
+                            rx.link(
+                                rx.image(
+                                    src="https://static.insales-cdn.com/r/9l1M24o5xE0/rs:fit:1000:0:1/q:100/plain/images/products/1/5370/612308218/Vaporesso-Xros-Mini-1000mAh-MTL-Pod-Kit-Sakura_Pink-3.jpeg@jpeg",
+                                    width="200px",
+                                    height="200px",       
+                                ),
+                                rx.text(
+                                    "Vaporesso XROS Mini",
+                                    width="100%", 
+                                    font_size="20px",
+                                    color=GRAY,
+                                    margin_top="10px",
+                                ),
+                                rx.text(
+                                    "200$",
+                                    font_size="35px",
+                                    color=BROWN, 
+                                    font_weight="bold",
+                                ),
+                            ),
+                        ),
+                        direction="row",
+                        spacing="4",
+                        wrap="nowrap",
+                        padding="8px",
+                        style={"width": "max-content"},
+                    ),
+                    type="always", 
+                    scrollbars="horizontal",
+                    style={"height": "auto", "maxWidth": "100%"},
+                ),
+                width="100%",
+                margin_top="50px",
             ),
             
             margin_left=rx.breakpoints(
