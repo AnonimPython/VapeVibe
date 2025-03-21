@@ -1,7 +1,7 @@
 import reflex as rx
 from ..ui.colors import *
 
-def social_link(tag="grid-2x2",color="white",href="#") -> rx.Component:
+def social_link(tag="grid-2x2",color="white",href="#",blank=True) -> rx.Component:
     return rx.link(
     rx.box(
         rx.icon(
@@ -16,4 +16,5 @@ def social_link(tag="grid-2x2",color="white",href="#") -> rx.Component:
     ),
         color=color,
         href=href,
+        is_external=blank,
     )

@@ -11,6 +11,7 @@ from .ui.colors import *
 from .pages.main import main
 from .pages.login import login
 from .pages.register import register
+from .pages.all_products import all_products
 
 
 app = rx.App(
@@ -35,3 +36,4 @@ app = rx.App(
 app.add_page(main, route="/")
 app.add_page(login, route="/login")
 app.add_page(register, route="/register")
+app.add_page(all_products, route="/all")

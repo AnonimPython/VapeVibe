@@ -1,6 +1,9 @@
 import reflex as rx
 from ..ui.colors import *
 from ..ui.social_links import social_link
+from ..ui.nav_bar import nav_bar
+
+
 def main() -> rx.Component:
     return rx.box(
     #* header
@@ -58,8 +61,8 @@ def main() -> rx.Component:
                     rx.text(
                         "one stop shop for the",
                         font_size=rx.breakpoints(
-                            initial="10px",
-                            sm="30px",
+                            initial="30px",
+                            sm="40px",
                             md="40px",
                         ),
                         margin_bottom="5px",
@@ -67,13 +70,14 @@ def main() -> rx.Component:
                     rx.heading(
                         "Vapeing World",
                         font_size=rx.breakpoints(
-                            sm="30px",
+                            initial="30px",
+                            sm="40px",
                             md="40px",
                         ),
                     ),    
                 ),
                 rx.box(
-                    social_link("search"),    
+                    social_link("search",blank=False),    
                 ),
 
                 margin_top="50px",
@@ -176,7 +180,7 @@ def main() -> rx.Component:
                     rx.spacer(),
                     rx.link(
                         "View All",
-                        href="#",
+                        href="/all",
                         color=BROWN,
                         underline="always",
                         weight="bold",
@@ -245,6 +249,7 @@ def main() -> rx.Component:
                 width="100%",
                 margin_top="50px",
             ),
+            rx.box(nav_bar(),),
         ),
         display=rx.breakpoints(
             initial="block",
