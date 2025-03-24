@@ -248,6 +248,8 @@ def main() -> rx.Component:
                 ),
                 width="100%",
                 margin_top="50px",
+                margin_bottom="90px",
+                
             ),
             rx.box(nav_bar(),),
         ),

@@ -13,7 +13,6 @@ class FilterState(rx.State):
 
 def all_products() -> rx.Component:
     return rx.box(
-        rx.box(nav_bar(),),
         rx.vstack(
             #* top bar
             rx.hstack(
