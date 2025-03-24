@@ -13,6 +13,7 @@ from .pages.login import login
 from .pages.register import register
 from .pages.all_products import all_products
 from .pages.product_details import product_details
+from .pages.profile import profile
 from .pages.error_404 import error_404
 
 
@@ -43,6 +44,7 @@ app.add_page(register, route="/register")
 app.add_page(all_products, route="/all")
 # app.add_page(product_details, route="/product/[product_id]") 
 app.add_page(product_details, route="/product/") 
+app.add_page(profile, route="/profile") 
 
 app.add_page(
     error_404,

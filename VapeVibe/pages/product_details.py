@@ -7,7 +7,7 @@ def product_details() -> rx.Component:
     return rx.box(
         rx.box(nav_bar()),
         rx.vstack(
-            #* top bar (оставляем как есть)
+            #* top bar
             rx.hstack(
                 rx.input(
                     rx.input.slot(
@@ -36,101 +36,148 @@ def product_details() -> rx.Component:
             rx.container(
                 rx.box(
                     rx.vstack(
-                        rx.hstack(
-                            #* left - image
-                            rx.box(
-                                image_zoom(
-                                    rx.image(
-                                        "https://megabuzz.ru/wp-content/uploads/2022/11/52-324x324.png",
-                                        border_radius="15px",
-                                        box_shadow=f"0 0 20px {BROWN}40",
-                                    )  
-                                ),
-                                padding="20px",
+                        #* image
+                        rx.box(
+                            image_zoom(
+                                rx.image(
+                                    "https://megabuzz.ru/wp-content/uploads/2022/11/52-324x324.png",
+                                    border_radius="15px",
+                                    box_shadow=f"0 0 20px {BROWN}40",
+                                    width="100%"
+                                )  
                             ),
-                            #* right - product info
-                            rx.vstack(
-                                # Title
-                                rx.heading(
-                                    "Jam Monster Grape", 
-                                    font_size="40px",
-                                    color=BROWN,
-                                    margin_bottom="20px",
-                                ),
-                                # Product details
-                                rx.hstack(
-                                    rx.text("30ml", color=GRAY, font_size="24px"),
-                                    rx.text("|", color=GRAY, margin_x="10px"),
-                                    rx.text("20mg", color=GRAY, font_size="24px"),
-                                    margin_bottom="30px",
-                                ),
-                                # Price
-                                rx.text(
-                                    "10$", 
-                                    font_size="40px", 
-                                    color=ADDITIONAL_TEXT_COLOR,
-                                    margin_bottom="30px",
-                                ),
-                                # Quantity selector
-                                rx.hstack(
-                                    rx.button(
-                                        rx.icon(tag="minus",size=20),
-                                        bg=ADDITIONAL_BACKGROUND,
-                                        color=GRAY,
-                                        # size="3",
-                                    ),
-                                    rx.text(
-                                        "1",
-                                        font_size="24px",
-                                        color=GRAY,
-                                        margin_x="20px",
-                                    ),
-                                    rx.button(
-                                        rx.icon(tag="plus",size=20),
-                                        bg=ADDITIONAL_BACKGROUND,
-                                        color=GRAY,
-                                        # size="4",
-                                    ),
-                                    rx.box(rx.text("Amount: 5")),
-                                    margin_bottom="30px",
-                                    align="center",
-                                    align_self="center",
-                                ),
-                                # Action buttons
-                                rx.hstack(
-                                    rx.button(
-                                        rx.icon(tag="heart", color=RED),
-                                        "Like",
-                                        bg=ADDITIONAL_BACKGROUND,
-                                        color=GRAY,
-                                        size="4",
-                                        margin_right="10px",
-                                    ),
-                                    rx.button(
-                                        rx.icon(tag="shopping-cart"),
-                                        "Add to cart",
-                                        bg=BROWN,
-                                        color="white",
-                                        size="3",
-                                    ),
-                                ),
-                                align_items="start",
-                                spacing="3",
-                            ),
-                            spacing="4",
+                            padding="20px",
+                            align_self="center",
                         ),
-                        justify="center",
+                        #* product info
+                        rx.vstack(
+                            # Title
+                            rx.heading(
+                                "Jam Monster Grape", 
+                                font_size=rx.breakpoints(
+                                    initial="20px",
+                                    sm="30px",
+                                    md="40px",
+                                ),
+                                color=BROWN,
+                                margin_bottom="20px",
+                                text_align="center",
+                            ),
+                            # Product details
+                            rx.hstack(
+                                rx.text(
+                                    "30ml", 
+                                    color=GRAY, 
+                                    font_size=rx.breakpoints(
+                                        initial="18px",
+                                        sm="20px",
+                                        md="24px",
+                                    ),
+                                ),
+                                rx.icon(tag="arrow-right-left", color=GRAY, margin_x="10px"),
+                                rx.text(
+                                    "20mg", 
+                                    color=GRAY, 
+                                    font_size=rx.breakpoints(
+                                        initial="18px",
+                                        sm="20px",
+                                        md="24px",
+                                    ),
+                                ),
+                                margin_bottom="30px",
+                                justify="center",
+                                width="100%",
+                                align="center",
+                                align_self="center",
+                            ),
+                            # Price
+                            rx.text(
+                                "10$", 
+                                font_size=rx.breakpoints(
+                                    initial="30px",
+                                    sm="35px",
+                                    md="40px",
+                                ), 
+                                color=ADDITIONAL_TEXT_COLOR,
+                                margin_bottom="30px",
+                                text_align="center",
+                            ),
+                            # Quantity selector
+                            rx.hstack(
+                                rx.box(
+                                    rx.text(
+                                        "Amount: 5",
+                                        font_size=rx.breakpoints(
+                                            initial="16px",
+                                            sm="18px",
+                                            md="20px",
+                                        ),
+                                    )
+                                ),
+                                margin_bottom="30px",
+                                justify="center",
+                                # width="100%",
+                            ),
+                            # Action buttons
+                            rx.flex(
+                                rx.button(
+                                    rx.icon(tag="heart", color=RED),
+                                    "Like",
+                                    bg=ADDITIONAL_BACKGROUND,
+                                    color=GRAY,
+                                    size="4",
+                                    width=rx.breakpoints(
+                                        initial="100%",
+                                        sm="48%",
+                                        md="48%",
+                                    ),
+                                    height="50px",
+                                    margin_bottom=rx.breakpoints(
+                                        initial="10px",
+                                        sm="0",
+                                    ),
+                                ),
+                                rx.button(
+                                    rx.icon(tag="shopping-cart"),
+                                    "Add to cart",
+                                    bg=BROWN,
+                                    color="white", 
+                                    size="3",
+                                    width=rx.breakpoints(
+                                        initial="100%",
+                                        sm="48%",
+                                        md="48%",
+                                    ),
+                                    height="50px",
+                                ),
+                                flex_direction=rx.breakpoints(
+                                    initial="column",
+                                    sm="row",
+                                ),
+                                justify="between",
+                                width="100%",
+                                spacing="4",
+                            ),
+                            align_items="center",
+                            width="100%",
+                            spacing="3",
+                        ),
+                        spacing="4",
                         width="100%",
                     ),
                     margin_top="50px",    
                     margin_bottom="90px",
-                    width="100%",
                     bg=BACKGROUND,
-                    padding="40px",
+                    padding=rx.breakpoints(
+                        initial="20px",
+                        sm="30px",
+                        md="40px",
+                    ),
                     border_radius="20px",
                     box_shadow=f"0 0 30px {BROWN}20",
                 ),
                 center_content=True,
+                width="100%",
             ),
             display=rx.breakpoints(
                 initial="block",
