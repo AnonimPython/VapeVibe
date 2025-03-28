@@ -27,6 +27,7 @@ def main() -> rx.Component:
                             social_link(tag="youtube"),
                             social_link(tag="facebook"),
                             social_link(tag="instagram"),
+                            social_link(tag="map-pinned"),
                             
                             spacing="5",
                         ),
@@ -77,7 +78,7 @@ def main() -> rx.Component:
                     ),    
                 ),
                 rx.box(
-                    social_link("search",blank=False),    
+                    social_link("search",blank=False,href="/all"),    
                 ),
 
                 margin_top="50px",

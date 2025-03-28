@@ -34,7 +34,7 @@ def nav_bar() -> rx.Component:
                     color="white",
                     size=40,
                 ),
-                href="/",
+                href="/profile",
             ),
             spacing="4",
             justify_content="space-around",

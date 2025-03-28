@@ -7,3 +7,4 @@ __pycache__/
 .env
 DOCS.md
 test.txt
+test.py
