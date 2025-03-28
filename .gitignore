@@ -8,3 +8,4 @@ __pycache__/
 DOCS.md
 test.txt
 test.py
+/uploaded_files/*
