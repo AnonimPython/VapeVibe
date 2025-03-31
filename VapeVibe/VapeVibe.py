@@ -17,6 +17,7 @@ from .pages.profile import profile
 from .pages.error_404 import error_404
 #* ADMIN PAGES
 from .admin.admin import admin_page
+from .admin.category import categories_page
 
 from sqlmodel import SQLModel
 from .models import *
@@ -60,3 +61,4 @@ app.add_page(
     route="/admin",
     title="Добавление товаров",
 )
+app.add_page(categories_page, route="/admin/categories")
