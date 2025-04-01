@@ -1,126 +1,86 @@
 import reflex as rx
 from sqlmodel import select
-from datetime import datetime
-from uuid import UUID
-from ..models import *
+from ..models import Category
 
 class CategoryState(rx.State):
+    """The category state."""
     categories: list[Category] = []
-    new_category_name: str = ""
-    new_category_description: str = ""
-
-    @rx.event  # Добавляем декоратор
-    def on_load(self):
-        """Load existing categories."""
+    
+    @rx.event
+    def load_categories(self) -> list[Category]:
+        """Get all categories from the database."""
         with rx.session() as session:
-            self.categories = session.exec(
-                select(Category).order_by(Category.created_at.desc())
-            ).all()
-            # Добавляем refresh для избежания stale object exceptions
-            for category in self.categories:
-                session.refresh(category)
+            self.categories = session.exec(select(Category)).all()
+    
+    @rx.event
+    def add_category(self, form_data: dict):
+        """Add a category to the database."""
+        with rx.session() as session:
+            # Check if category with this name already exists
+            if session.exec(select(Category).where(
+                Category.name == form_data["name"])).first():
+                return rx.toast.warning("Category with this name already exists")
+            
+            new_category = Category(**form_data)
+            session.add(new_category)
+            session.commit()
+            
+            # Reload categories after adding new one
+            self.load_categories()
+            return rx.toast.success(f"Category {form_data['name']} has been added.")
 
-    @rx.event  # Добавляем декоратор 
-    def add_category(self):
-        if not self.new_category_name:
-            return rx.window_alert("Введите название категории")
-        
-        try:
-            with rx.session() as session:
-                # Проверяем существование категории
-                existing = session.exec(
-                    select(Category).where(Category.name == self.new_category_name)
-                ).first()
-                
-                if existing:
-                    return rx.window_alert("Категория с таким названием уже существует")
-
-                new_category = Category(
-                    name=self.new_category_name,
-                    description=self.new_category_description or None
-                )
-                session.add(new_category)
-                session.commit()
-                session.refresh(new_category)
-                
-                # Обновляем список после успешного добавления
-                self.categories = session.exec(
-                    select(Category).order_by(Category.created_at.desc())
-                ).all()
-                
-                self.new_category_name = ""
-                self.new_category_description = ""
-                
-            return rx.window_alert("Категория успешно добавлена!")
-        except Exception as e:
-            print("Error adding category:", e)
-            return rx.window_alert(f"Ошибка при добавлении категории: {str(e)}")
-
-def category_card(category: Category):
-    return rx.vstack(
-        rx.heading(category.name, size="5"),
-        rx.text(
-            rx.cond(
-                category.description,
-                category.description,
-                "Без описания"
-            )
-        ),
-        rx.moment(
-            category.created_at,
-            format="YYYY-MM-DD HH:mm"
-        ),
-        padding="1em",
-        border="1px solid #eaeaea", 
-        border_radius="md",
-        width="100%"
+def show_category(category: rx.Var):
+    """Show a category in a table row."""
+    return rx.table.row(
+        rx.table.cell(category.name),
+        # Using rx.cond instead of or operator
+        rx.table.cell(rx.cond(category.description != "", category.description, "")),
+        # rx.table.cell(rx.text(str(category.created_at))),
     )
 
-def categories_page():
+def categories_page() -> rx.Component:
     return rx.vstack(
-        rx.vstack(
-            rx.heading("Добавить новую категорию"),
-            rx.form(
-                rx.vstack(
-                    rx.input(
-                        placeholder="Название категории*",
-                        value=CategoryState.new_category_name,
-                        on_change=CategoryState.set_new_category_name,
-                        required=True
-                    ),
-                    rx.text_area(
-                        placeholder="Описание категории",
-                        value=CategoryState.new_category_description,
-                        on_change=CategoryState.set_new_category_description
-                    ),
-                    rx.button(
-                        "Сохранить категорию",
-                        type_="submit",
-                        color_scheme="green"
-                    ),
-                    spacing="3"
+        rx.heading("Categories", font_size="2em"),
+        
+        # Form for adding new categories
+        rx.form(
+            rx.vstack(
+                rx.input(
+                    placeholder="Category Name",
+                    name="name",
+                    required=True
                 ),
-                on_submit=CategoryState.add_category
+                rx.text_area(
+                    placeholder="Category Description (optional)",
+                    name="description",
+                ),
+                rx.button("Add Category", type="submit"),
+                spacing="4",
             ),
-            padding="2em",
-            border="1px solid #eaeaea",
-            border_radius="10px",
-            width="100%",
-            max_width="600px"
+            on_submit=CategoryState.add_category,
+            reset_on_submit=True,
         ),
         
-        rx.heading("Существующие категории"),
-        rx.vstack(
-            rx.foreach(
-                CategoryState.categories,
-                lambda category: category_card(category)
+        # Table showing existing categories
+        rx.table.root(
+            rx.table.header(
+                rx.table.row(
+                    rx.table.column_header_cell("Name"),
+                    rx.table.column_header_cell("Description"),
+                ),
             ),
-            spacing="3",
-            width="100%"
+            rx.table.body(
+                rx.foreach(
+                    CategoryState.categories,
+                    show_category
+                ),
+            ),
+            on_mount=CategoryState.load_categories,
+            variant="surface",
+            size="3",
+            width="100%",
         ),
-        on_mount=CategoryState.on_load,
-        spacing="5",
-        padding="2em",
+        spacing="8",
         width="100%",
-        max_width="1200px"
+        padding="6",
     )

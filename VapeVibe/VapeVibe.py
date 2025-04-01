@@ -16,7 +16,7 @@ from .pages.product_details import product_details
 from .pages.profile import profile
 from .pages.error_404 import error_404
 #* ADMIN PAGES
-from .admin.admin import admin_page
+# from .admin.admin import admin_page
 from .admin.category import categories_page
 
 from sqlmodel import SQLModel
@@ -56,9 +56,9 @@ app.add_page(
     title="404 - Page not found",
 )
 #* ADMIN PAGES
-app.add_page(
-    admin_page,
-    route="/admin",
-    title="Добавление товаров",
-)
+# app.add_page(
+#     admin_page,
+#     route="/admin",
+#     title="Добавление товаров",
+# )
 app.add_page(categories_page, route="/admin/categories")

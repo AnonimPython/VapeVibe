@@ -1,37 +1,51 @@
 import reflex as rx
 from datetime import datetime
-from uuid import UUID, uuid4
 from typing import Optional, List
-from sqlmodel import Field, Relationship, Column, JSON
+from sqlmodel import Field, Relationship
 
-class Category(rx.Model, table=True):
-    id: UUID = Field(default_factory=uuid4, primary_key=True)
+class TimeStampModel(rx.Model):
+    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
+
+class Category(TimeStampModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
     name: str = Field(unique=True, max_length=50)
-    description: Optional[str] = Field(max_length=300)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    products: list["Product"] = Relationship(back_populates="category")
+    description: Optional[str] = Field(default=None, max_length=300)
+    products: List["Product"] = Relationship(back_populates="category")
 
-class Product(rx.Model, table=True):
-    id: UUID = Field(default_factory=uuid4, primary_key=True)
-    name: str = Field(index=True, max_length=100)
-    description: Optional[str] = Field(max_length=500)
-    price: float
+class Product(TimeStampModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str = Field(max_length=100)
+    description: Optional[str] = Field(default=None, max_length=500)
+    price: float = Field(default=0.0)
     brand: str = Field(max_length=50)
-    flavor: str = Field(max_length=50)
-    device_type: str = Field(max_length=30)
-    battery: bool
-    capacity: int
-    nicotine: Optional[str] = Field(max_length=20)
-    category_id: Optional[UUID] = Field(foreign_key="category.id")
+    category_id: Optional[int] = Field(default=None, foreign_key="category.id")
     category: Optional[Category] = Relationship(back_populates="products")
-    is_active: bool = Field(default=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    images: List[dict] = Field(sa_column=Column(JSON), default=[])
+    images: List["Image"] = Relationship(back_populates="product")
 
-
-class Image(rx.Model, table=True):
-    id: UUID = Field(default_factory=uuid4, primary_key=True)
+class Image(TimeStampModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
     filename: str = Field(max_length=255)
-    caption: str = Field(max_length=500)
+    caption: Optional[str] = Field(default=None, max_length=500)
     path: str = Field(max_length=255)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    product_id: Optional[int] = Field(default=None, foreign_key="product.id")
+    product: Optional[Product] = Relationship(back_populates="images")
+    
+#* USER DATABASE
+class User(rx.Model, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    username: str = Field(max_length=50)
+    email: str = Field(max_length=50)
+    password: str = Field(max_length=50)
+    
+    
+class Register(rx.Model, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    username: str = Field(max_length=50, unique=True)  
+    email: str = Field(max_length=50, unique=True)
+    password: str = Field(max_length=50)
+    
+    
+class Login(rx.Model, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    email: str = Field(max_length=50)
+    password: str = Field(max_length=50)
