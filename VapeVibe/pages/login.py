@@ -32,7 +32,7 @@ class LoginState(rx.State):
                     return rx.toast.error(self.error_message)
 
                 # Convert ID to string before storing in cookie
-                self.user_id = int(user.id)  # Convert to string here
+                self.user_id = int(user.id)
                 self.user_name = user.username
                 self.user_email = user.email
 

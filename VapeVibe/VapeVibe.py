@@ -8,7 +8,7 @@ import reflex as rx
 from rxconfig import config
 from .ui.colors import *
 #* USER PAGES
-from .pages.main import main
+from .pages.main import State, main
 from .pages.login import login
 from .pages.register import register
 from .pages.all_products import all_products
@@ -16,7 +16,7 @@ from .pages.product_details import product_details
 from .pages.profile import profile
 from .pages.error_404 import error_404
 #* ADMIN PAGES
-# from .admin.admin import admin_page
+from .admin.admin import admin_page
 from .admin.category import categories_page
 
 from sqlmodel import SQLModel
@@ -46,8 +46,8 @@ app.add_page(main, route="/")
 app.add_page(login, route="/login")
 app.add_page(register, route="/register")
 app.add_page(all_products, route="/all")
-# app.add_page(product_details, route="/product/[product_id]") 
-app.add_page(product_details, route="/product/") 
+# app.add_page(product_details, route="/product/[product_id]")
+# app.add_page(product_details, route="/product/") 
 app.add_page(profile, route="/profile") 
 
 app.add_page(
@@ -56,9 +56,9 @@ app.add_page(
     title="404 - Page not found",
 )
 #* ADMIN PAGES
-# app.add_page(
-#     admin_page,
-#     route="/admin",
-#     title="Добавление товаров",
-# )
+app.add_page(
+    admin_page,
+    route="/admin",
+    title="Добавление товаров",
+)
 app.add_page(categories_page, route="/admin/categories")
