@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: fcba953c7245
+Revision ID: 74cf4fa312ae
 Revises: 
-Create Date: 2025-04-01 22:44:37.330780
+Create Date: 2025-04-03 23:21:05.153045
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 import sqlmodel
 
 # revision identifiers, used by Alembic.
-revision: str = 'fcba953c7245'
+revision: str = '74cf4fa312ae'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -31,6 +31,16 @@ def upgrade() -> None:
     with op.batch_alter_table('category', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_category_created_at'), ['created_at'], unique=False)
 
+    op.create_table('user',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('username', sqlmodel.sql.sqltypes.AutoString(length=50), nullable=False),
+    sa.Column('email', sqlmodel.sql.sqltypes.AutoString(length=100), nullable=False),
+    sa.Column('password_hash', sqlmodel.sql.sqltypes.AutoString(length=255), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=False),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('email'),
+    sa.UniqueConstraint('username')
+    )
     op.create_table('product',
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('id', sa.Integer(), nullable=False),
@@ -38,19 +48,12 @@ def upgrade() -> None:
     sa.Column('description', sqlmodel.sql.sqltypes.AutoString(length=500), nullable=True),
     sa.Column('price', sa.Float(), nullable=False),
     sa.Column('brand', sqlmodel.sql.sqltypes.AutoString(length=50), nullable=False),
-    sa.Column('flavor', sqlmodel.sql.sqltypes.AutoString(length=50), nullable=True),
-    sa.Column('device_type', sqlmodel.sql.sqltypes.AutoString(length=30), nullable=True),
-    sa.Column('battery', sa.Boolean(), nullable=False),
-    sa.Column('capacity', sa.Integer(), nullable=False),
-    sa.Column('nicotine', sqlmodel.sql.sqltypes.AutoString(length=20), nullable=True),
-    sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('category_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['category_id'], ['category.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     with op.batch_alter_table('product', schema=None) as batch_op:
         batch_op.create_index(batch_op.f('ix_product_created_at'), ['created_at'], unique=False)
-        batch_op.create_index(batch_op.f('ix_product_name'), ['name'], unique=False)
 
     op.create_table('image',
     sa.Column('created_at', sa.DateTime(), nullable=False),
@@ -75,10 +78,10 @@ def downgrade() -> None:
 
     op.drop_table('image')
     with op.batch_alter_table('product', schema=None) as batch_op:
-        batch_op.drop_index(batch_op.f('ix_product_name'))
         batch_op.drop_index(batch_op.f('ix_product_created_at'))
 
     op.drop_table('product')
+    op.drop_table('user')
     with op.batch_alter_table('category', schema=None) as batch_op:
         batch_op.drop_index(batch_op.f('ix_category_created_at'))
 

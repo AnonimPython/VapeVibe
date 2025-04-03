@@ -1,50 +1,71 @@
 import reflex as rx
 from sqlmodel import select
+from ..models import User
+from .auth_utils import hash_password
 from ..ui.colors import *
-from ..models import Register
 
 class RegisterState(rx.State):
-    form_data: dict = {}
+    success_message: str = ""
+    error_message: str = ""
 
     @rx.event
     def handle_submit(self, form_data: dict):
-        
         try:
+            #* checkbox 
             if not form_data.get("checkbox"):
-                return rx.toast.error("Please confirm you are over 18")
+                self.error_message = "Only 18+ users! 🚫"
+                return rx.toast.error(self.error_message)
 
+            #* password validation
+            if len(form_data["password"]) < 8:
+                self.error_message = "8 simbols in password or more 👎"
+                return rx.toast.error(self.error_message)
+                
+            if not any(char.isdigit() for char in form_data["password"]):
+                self.error_message = "In password write numbers 🔢"
+                return rx.toast.error(self.error_message)
+                
             if form_data["password"] != form_data["confirm_password"]:
+                self.error_message = "Passwords didn't match ❌"
                 return [
                     rx.set_value("password", ""),
                     rx.set_value("confirm_password", ""),
-                    rx.toast.error("Passwords do not match")
+                    rx.toast.error(self.error_message)
                 ]
-                
+
+            #* check if user exists in database
             with rx.session() as session:
-                # Check existing user in single query
                 existing_user = session.exec(
-                    select(Register).where(
-                        (Register.username == form_data["username"]) | 
-                        (Register.email == form_data["email"])
+                    select(User).where(
+                        (User.username == form_data["username"]) | 
+                        (User.email == form_data["email"])
                     )
                 ).first()
                 
                 if existing_user:
-                    return rx.toast.error("Username or email already exists")
-                    
-                # Create new user
-                new_user = Register(
+                    self.error_message = "Пользователь уже существует 😞"
+                    return rx.toast.error(self.error_message)
+
+                # Создание нового пользователя
+                new_user = User(
                     username=form_data["username"],
                     email=form_data["email"],
-                    password=form_data["password"]  # Should hash password in production
+                    password_hash=hash_password(form_data["password"])
                 )
                 session.add(new_user)
                 session.commit()
-                
-                return rx.redirect("/")
-                
+                session.refresh(new_user)
+
+                self.success_message = "Регистрация успешна! 🔓"
+                return [
+                    rx.toast.success(self.success_message),
+                    rx.redirect("/login")
+                ]
+            
         except Exception as e:
-            return rx.toast.error(str(e))
+            self.error_message = f"Ошибка: {str(e)} 😢"
+            return rx.toast.error(self.error_message)
+
 
 def register() -> rx.Component:
     return rx.box(

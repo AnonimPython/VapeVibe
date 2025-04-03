@@ -33,19 +33,7 @@ class Image(TimeStampModel, table=True):
 #* USER DATABASE
 class User(rx.Model, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    username: str = Field(max_length=50)
-    email: str = Field(max_length=50)
-    password: str = Field(max_length=50)
-    
-    
-class Register(rx.Model, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    username: str = Field(max_length=50, unique=True)  
-    email: str = Field(max_length=50, unique=True)
-    password: str = Field(max_length=50)
-    
-    
-class Login(rx.Model, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    email: str = Field(max_length=50)
-    password: str = Field(max_length=50)
+    username: str = Field(max_length=50, unique=True)
+    email: str = Field(max_length=100, unique=True)
+    password_hash: str = Field(max_length=255)
+    created_at: datetime = Field(default_factory=datetime.utcnow)

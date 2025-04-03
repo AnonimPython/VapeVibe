@@ -1,5 +1,43 @@
 import reflex as rx
+from sqlmodel import select
+from ..models import User
+from .auth_utils import verify_password
 from ..ui.colors import *
+
+class LoginState(rx.State):
+    is_authenticated: bool = False
+    error_message: str = ""
+
+    @rx.event
+    def handle_submit(self, form_data: dict):
+        try:
+            with rx.session() as session:
+                user = session.exec(
+                    select(User).where(User.email == form_data["email"])
+                ).first()
+                
+                if not user:
+                    self.error_message = "Not HAHA 😈"
+                    return rx.toast.error(self.error_message)
+                
+                if not verify_password(form_data["password"], user.password_hash):
+                    self.error_message = "Not HAHA 😈"
+                    return rx.toast.error(self.error_message)
+                
+                # Устанавливаем флаг аутентификации
+                self.is_authenticated = True
+                self.error_message = ""
+                
+                # Сохраняем пользователя в состоянии
+                return [
+                    rx.toast.success("Access 🔓"),
+                    rx.redirect("/")
+                ]
+                
+        except Exception as e:
+            self.error_message = f"Not HAHA: {str(e)} 😈"
+            return rx.toast.error(self.error_message)
+        
 def login() -> rx.Component:
     return rx.box(
         rx.vstack(
@@ -16,7 +54,7 @@ def login() -> rx.Component:
                         rx.vstack(
                             rx.input(
                                 placeholder="Mail",
-                                name="mail",
+                                name="email",
                                 width="100%",
                                 style=input_style
                             ),
