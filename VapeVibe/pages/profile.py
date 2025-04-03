@@ -1,7 +1,7 @@
 import reflex as rx
 from ..ui.nav_bar import nav_bar
 from ..ui.colors import *
-
+from .login import LoginState
 
 def profile() -> rx.Component:
     return rx.box(
@@ -19,13 +19,14 @@ def profile() -> rx.Component:
                 #* profile info
                 rx.vstack(
                     rx.hstack(
-                        rx.text("Name", font_size="30px"),
-                        rx.text("Second Name", font_size="30px"),
+                        # Use the username from cookies
+                        rx.text(LoginState.user_name, font_size="30px"),
                         justify="center",
                         spacing="3",
                     ),
+                    # Use the email from cookies
                     rx.heading(
-                        "exemple@gmail.com",
+                        LoginState.user_email,
                         font_size="20px",
                     ),
                     #* cart
@@ -56,10 +57,6 @@ def profile() -> rx.Component:
             align="center",
             width="100%",
         ),
-        
-        
-        
-        
         display=rx.breakpoints(
             initial="block",
             sm="block", 
@@ -73,5 +70,4 @@ def profile() -> rx.Component:
             md="40px",      
         ),
         bg=BACKGROUND,
-        
     )

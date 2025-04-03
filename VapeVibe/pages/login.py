@@ -7,12 +7,14 @@ from ..ui.colors import *
 class LoginState(rx.State):
     is_authenticated: bool = False
     error_message: str = ""
+    user_id: str = rx.Cookie()  
+    user_name: str = rx.Cookie()
+    user_email: str = rx.Cookie()
 
     @rx.event
     def handle_submit(self, form_data: dict):
         try:
             with rx.session() as session:
-                # 1. Добавляем отладочный вывод
                 print("Attempting login with email:", form_data["email"])
                 
                 user = session.exec(
@@ -23,22 +25,21 @@ class LoginState(rx.State):
                     self.error_message = "Not HAHA 😈"
                     print("User not found")
                     return rx.toast.error(self.error_message)
-                
-                # 2. Проверяем хэш пароля
-                print(f"Stored hash: {user.password_hash}")
-                print(f"Input password: {form_data['password']}")
-                
+
                 if not verify_password(form_data["password"], user.password_hash):
                     self.error_message = "Not HAHA 😈"
                     print("Password verification failed")
                     return rx.toast.error(self.error_message)
-                
-                # 3. Явно обновляем состояние
+
+                # Convert ID to string before storing in cookie
+                self.user_id = int(user.id)  # Convert to string here
+                self.user_name = user.username
+                self.user_email = user.email
+
                 self.is_authenticated = True
                 self.error_message = ""
                 print("Login successful! Redirecting...")
-                
-                # 4. Исправляем возвращаемое значение
+
                 return rx.redirect("/")
                 
         except Exception as e:
@@ -63,15 +64,15 @@ def login() -> rx.Component:
                             rx.input(
                                 placeholder="Mail",
                                 name="email", 
-                                required=True,  # Add this
+                                required=True, 
                                 width="100%",
                                 style=input_style
                             ),
                             rx.input(
                                 placeholder="Password",
                                 name="password",
-                                type="password",  # Add this for password field
-                                required=True,  # Add this 
+                                type="password", 
+                                required=True,
                                 width="100%",
                                 style=input_style
                             ),
