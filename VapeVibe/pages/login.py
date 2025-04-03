@@ -12,30 +12,38 @@ class LoginState(rx.State):
     def handle_submit(self, form_data: dict):
         try:
             with rx.session() as session:
+                # 1. Добавляем отладочный вывод
+                print("Attempting login with email:", form_data["email"])
+                
                 user = session.exec(
                     select(User).where(User.email == form_data["email"])
                 ).first()
                 
                 if not user:
                     self.error_message = "Not HAHA 😈"
+                    print("User not found")
                     return rx.toast.error(self.error_message)
+                
+                # 2. Проверяем хэш пароля
+                print(f"Stored hash: {user.password_hash}")
+                print(f"Input password: {form_data['password']}")
                 
                 if not verify_password(form_data["password"], user.password_hash):
                     self.error_message = "Not HAHA 😈"
+                    print("Password verification failed")
                     return rx.toast.error(self.error_message)
                 
-                # Устанавливаем флаг аутентификации
+                # 3. Явно обновляем состояние
                 self.is_authenticated = True
                 self.error_message = ""
+                print("Login successful! Redirecting...")
                 
-                # Сохраняем пользователя в состоянии
-                return [
-                    rx.toast.success("Access 🔓"),
-                    rx.redirect("/")
-                ]
+                # 4. Исправляем возвращаемое значение
+                return rx.redirect("/")
                 
         except Exception as e:
             self.error_message = f"Not HAHA: {str(e)} 😈"
+            print("Error:", str(e))
             return rx.toast.error(self.error_message)
         
 def login() -> rx.Component:
@@ -54,14 +62,17 @@ def login() -> rx.Component:
                         rx.vstack(
                             rx.input(
                                 placeholder="Mail",
-                                name="email",
+                                name="email", 
+                                required=True,  # Add this
                                 width="100%",
                                 style=input_style
                             ),
                             rx.input(
-                                placeholder="Password", 
+                                placeholder="Password",
                                 name="password",
-                                width="100%", 
+                                type="password",  # Add this for password field
+                                required=True,  # Add this 
+                                width="100%",
                                 style=input_style
                             ),
                             spacing="6"
@@ -73,7 +84,7 @@ def login() -> rx.Component:
                             margin_top="20px",
                             type="submit",
                         ),
-                        # on_submit=FormState.handle_submit,
+                        on_submit=LoginState.handle_submit,
                         reset_on_submit=True,
                     ),
                     rx.hstack(
