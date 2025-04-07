@@ -46,7 +46,11 @@ app.add_page(main, route="/")
 app.add_page(login, route="/login")
 app.add_page(register, route="/register")
 app.add_page(all_products, route="/all")
-# app.add_page(product_details, route="/product/[product_id]")
+app.add_page(
+    product_details,
+    route="/product/[product_id]",
+    title="Product Details",
+)
 # app.add_page(product_details, route="/product/") 
 app.add_page(profile, route="/profile") 
 

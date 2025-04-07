@@ -190,36 +190,40 @@ def main() -> rx.Component:
                     rx.flex(
                         rx.foreach(
                             State.products,
-                            lambda product: rx.box(
-                                rx.hstack(
-                                    rx.image(
-                                        src=product.image_url,
-                                        width="100px",
-                                        height="100px",
-                                        object_fit="cover",
-                                        border_radius="8px"
-                                    ),    
-                                    rx.vstack(
-                                        rx.text(product.name, font_size="20px", color=GRAY),
-                                        rx.text(f"{product.price}$", font_size="20px", color=BROWN, font_weight="bold"),
-                                        spacing="1",
-                                        align_items="start",
-                                        flex="1",
+                            lambda product: rx.link(
+                                rx.box(
+                                    rx.hstack(
+                                        rx.image(
+                                            src=product.image_url,
+                                            width="100px",
+                                            height="100px",
+                                            object_fit="cover",
+                                            border_radius="8px"
+                                        ),    
+                                        rx.vstack(
+                                            rx.text(product.name, font_size="20px", color=GRAY),
+                                            rx.text(f"{product.price}$", font_size="20px", color=BROWN, font_weight="bold"),
+                                            spacing="1",
+                                            align_items="start",
+                                            flex="1",
+                                        ),
+                                        rx.button(
+                                            rx.icon(tag="heart", color='red', size=30), 
+                                            background="transparent",
+                                            padding="0",
+                                        ),
+                                        spacing="3",
+                                        width="100%",
+                                        padding="10px",
                                     ),
-                                    rx.button(
-                                        rx.icon(tag="heart", color='red', size=30), 
-                                        background="transparent",
-                                        padding="0",
-                                    ),
-                                    spacing="3",
-                                    width="100%",
-                                    padding="10px",
+                                    border="1px solid #202020",
+                                    border_radius="12px",
+                                    min_width="300px",
+                                    flex="1 1 300px",
+                                    margin=rx.breakpoints(initial="0", sm="5px", md="10px"),
                                 ),
-                                border="1px solid #202020",
-                                border_radius="12px",
-                                min_width="300px",
-                                flex="1 1 300px",
-                                margin=rx.breakpoints(initial="0", sm="5px", md="10px"),
+                                href=f"/product/{product.id}", #* Dynamic link
+                                _hover={"text_decoration": "none"},
                             )
                         ),
                         wrap="wrap",
